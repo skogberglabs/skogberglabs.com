@@ -4,7 +4,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const rootDir = path.resolve(__dirname, '../../../../src/main/resources');
 const cssDir = path.resolve(rootDir, 'css');
-// const vendorsDir = path.resolve(rootDir, 'vendors');
 
 const WebApp = Merge(ScalaJS, {
   entry: {
@@ -31,7 +30,7 @@ const WebApp = Merge(ScalaJS, {
       {
         test: /\.(png|jpg|jpeg)$/,
         use: [
-          { loader: 'file-loader', options: { name: '[folder]/[name].[ext]' } }
+          { loader: 'file-loader', options: { name: '[folder]/[name].[hash].[ext]' } }
         ]
       },
       {
@@ -44,13 +43,7 @@ const WebApp = Merge(ScalaJS, {
         ]
       }
     ]
-  },
-  // output: {
-  //   filename: '[name].js'
-  // },
-  // plugins: [
-  //   new MiniCssExtractPlugin({filename: '[name].css'})
-  // ]
+  }
 });
 
 module.exports = WebApp;
