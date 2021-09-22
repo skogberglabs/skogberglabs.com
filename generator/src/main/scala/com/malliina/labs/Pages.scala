@@ -34,10 +34,11 @@ class Pages(isProd: Boolean, root: Path) {
     if (isProd) {
       scriptAt("frontend-opt.js", defer)
     } else {
+      val prefix = "frontend-fastopt"
       modifier(
-        scriptAt("library.js"),
-        scriptAt("loader.js"),
-        scriptAt("app.js"),
+        scriptAt(s"$prefix-library.js"),
+        scriptAt(s"$prefix-loader.js"),
+        scriptAt(s"$prefix.js"),
         script(src := LiveReload.script)
       )
     }
@@ -54,6 +55,7 @@ class Pages(isProd: Boolean, root: Path) {
           name := "viewport",
           content := "width=device-width, initial-scale=1.0, maximum-scale=1.0"
         ),
+        link(rel := "shortcut icon", `type` := "image/png", href := findAsset("img/jag-16x16.png")),
         meta(name := "description", content := globalDescription),
         meta(name := "keywords", content := "Skogberg Labs"),
         meta(name := "twitter:card", content := "summary"),
@@ -83,6 +85,7 @@ class Pages(isProd: Boolean, root: Path) {
   def findAsset(file: String): String = {
     val path = root.resolve(file)
     val dir = path.getParent
+    Files.createDirectories(dir)
     val candidates = Files.list(dir).iterator().asScala.toList
     val lastSlash = file.lastIndexOf("/")
     val nameStart = if (lastSlash == -1) 0 else lastSlash + 1

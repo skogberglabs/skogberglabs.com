@@ -29,6 +29,12 @@ const WebApp = Merge(ScalaJS, {
         ]
       },
       {
+        test: /\.(png|jpg|jpeg)$/,
+        use: [
+          { loader: 'file-loader', options: { name: '[folder]/[name].[ext]' } }
+        ]
+      },
+      {
         test: /\.less$/,
         use: [
           MiniCssExtractPlugin.loader,
