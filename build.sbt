@@ -26,19 +26,19 @@ val frontend = project
     siteDir := (ThisBuild / baseDirectory).value / "target" / "site",
     Compile / fullOptJS / build := (Compile / fullOptJS / webpack).value.map { af =>
       val destDir = siteDir.value
-      Files.createDirectories(destDir.toPath)
       val base = (Compile / npmUpdate / crossTarget).value
       val rel = af.data.relativeTo(base).get
       val dest = (destDir / rel.toString).toPath
+      Files.createDirectories(dest.getParent)
       sLog.value.info(s"Write $dest ${af.metadata}")
       Files.copy(af.data.toPath, dest, StandardCopyOption.REPLACE_EXISTING).toFile
     },
     Compile / fastOptJS / build := (Compile / fastOptJS / webpack).value.map { af =>
       val destDir = siteDir.value
-      Files.createDirectories(destDir.toPath)
       val base = (Compile / npmUpdate / crossTarget).value
       val rel = af.data.relativeTo(base).get
       val dest = (destDir / rel.toString).toPath
+      Files.createDirectories(dest.getParent)
       sLog.value.info(
         s"Write $dest from ${af.data} ${af.metadata} ${af.metadata.get(BundlerFileTypeAttr)}"
       )
