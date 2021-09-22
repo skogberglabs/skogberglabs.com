@@ -100,7 +100,8 @@ class Pages(isProd: Boolean, root: Path) {
     val found = result.getOrElse(
       fail(s"Not found: '$file'. Found ${candidates.mkString(", ")}.")
     )
-    root.relativize(found).toString.replace("\\", "/")
+    val relative = root.relativize(found).toString.replace("\\", "/")
+    s"/$relative"
   }
 
   def fail(message: String) = throw new Exception(message)
