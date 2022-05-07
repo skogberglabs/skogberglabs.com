@@ -30,6 +30,8 @@ object Pages {
 class Pages(isProd: Boolean, root: Path) {
   val globalDescription = "Skogberg Labs."
 
+  val section = tag("section")
+
   val scripts =
     if (isProd) {
       scriptAt("frontend-opt.js", defer)
@@ -46,12 +48,21 @@ class Pages(isProd: Boolean, root: Path) {
   def index = base("Skogberg Labs")(empty)
   def pill = base("The Pill")(empty)
   def support = base("Support")(
-    tag("section")(`class` := "support")(
-      h1("Support"),
+    section(`class` := "section support")(
+      h1(`class` := "title")("Support"),
       p("Should you have any questions, you may:"),
       ul(
         li("Email ", a(href := "mailto:info@skogberglabs.com")("info@skogberglabs.com")),
         li("Contact me on ", a(href := "https://twitter.com/skogberglabs")("Twitter"))
+      )
+    )
+  )
+  def privacy = base("Privacy policy")(
+    section(`class` := "section privacy")(
+      h1(`class` := "title")("Privacy policy"),
+      p("Alarms and any related data is only stored on the device."),
+      p(
+        "PillAlarm collects no user information. No information is sent anywhere. There is no tracking."
       )
     )
   )
