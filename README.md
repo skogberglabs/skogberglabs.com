@@ -1,4 +1,4 @@
-# meny
+# skogberglabs.com
 
 Site [www.skogberlabs.com](https://www.skogberglabs.com).
 

@@ -20,7 +20,8 @@ object Generator {
     val pages = Pages(isProd, dist)
     val pageMap = Map(
       pages.index -> "index.html",
-      pages.pill -> "thepill/index.html"
+      pages.pill -> "thepill/index.html",
+      pages.support -> "pillalarm/support/index.html"
     )
     pageMap.foreach { case (page, file) => page.write(dist.resolve(file)) }
     NetlifyClient.writeHeaders(dist)

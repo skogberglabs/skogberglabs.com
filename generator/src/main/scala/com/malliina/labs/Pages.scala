@@ -45,6 +45,16 @@ class Pages(isProd: Boolean, root: Path) {
 
   def index = base("Skogberg Labs")(empty)
   def pill = base("The Pill")(empty)
+  def support = base("Support")(
+    tag("section")(`class` := "support")(
+      h1("Support"),
+      p("Should you have any questions, you may:"),
+      ul(
+        li("Email ", a(href := "mailto:info@skogberglabs.com")("info@skogberglabs.com")),
+        li("Contact me on ", a(href := "https://twitter.com/skogberglabs")("Twitter"))
+      )
+    )
+  )
 
   def base(titleText: String)(contents: Modifier*): TagPage = TagPage(
     html(lang := "en")(
