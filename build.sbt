@@ -7,7 +7,7 @@ inThisBuild(
   Seq(
     organization := "com.malliina",
     version := "1.0.0",
-    scalaVersion := "3.1.1"
+    scalaVersion := "3.2.2"
   )
 )
 
@@ -49,31 +49,29 @@ val frontend = project
       ("com.lihaoyi" %%% "scalatags" % scalatagsVersion).cross(CrossVersion.for3Use2_13)
     ),
     watchSources += WatchSource(baseDirectory.value / "src", "*.scala", HiddenFileFilter),
-    webpack / version := "4.39.1",
-    startWebpackDevServer / version := "3.7.2",
+    webpack / version := "5.65.0",
+    webpackCliVersion := "4.9.1",
+    startWebpackDevServer / version := "4.5.0",
     Compile / fastOptJS / webpackBundlingMode := BundlingMode.LibraryOnly(),
     Compile / fullOptJS / webpackBundlingMode := BundlingMode.Application,
     webpackEmitSourceMaps := false,
     Compile / npmDependencies ++= Seq(
-      "@fortawesome/fontawesome-free" -> "5.15.2",
-      "bootstrap" -> "4.6.0",
-      "jquery" -> "3.6.0",
-      "popper.js" -> "1.16.1"
+      "@popperjs/core" -> "2.11.6",
+      "bootstrap" -> "5.2.3"
     ),
     Compile / npmDevDependencies ++= Seq(
-      "autoprefixer" -> "9.6.1",
-      "cssnano" -> "4.1.10",
-      "css-loader" -> "3.2.0",
-      "file-loader" -> "4.2.0",
-      "less" -> "3.9.0",
-      "less-loader" -> "5.0.0",
-      "mini-css-extract-plugin" -> "0.8.0",
-      "postcss-import" -> "12.0.1",
-      "postcss-loader" -> "3.0.0",
-      "postcss-preset-env" -> "6.7.0",
-      "style-loader" -> "1.0.0",
-      "url-loader" -> "2.1.0",
-      "webpack-merge" -> "4.2.1"
+      "autoprefixer" -> "10.4.13",
+      "cssnano" -> "5.1.15",
+      "css-loader" -> "6.7.3",
+      "less" -> "4.1.3",
+      "less-loader" -> "11.1.0",
+      "mini-css-extract-plugin" -> "2.7.2",
+      "postcss" -> "8.4.21",
+      "postcss-import" -> "15.1.0",
+      "postcss-loader" -> "7.0.2",
+      "postcss-preset-env" -> "8.0.1",
+      "style-loader" -> "3.3.1",
+      "webpack-merge" -> "5.8.0"
     )
   )
 
@@ -82,7 +80,7 @@ val generator = project
   .enablePlugins(LiveReloadPlugin)
   .settings(
     libraryDependencies ++= SbtUtils.loggingDeps ++ Seq(
-      "com.malliina" %% "primitives" % "3.0.0",
+      "com.malliina" %% "primitives" % "3.4.0",
       ("com.lihaoyi" %% "scalatags" % scalatagsVersion).cross(CrossVersion.for3Use2_13)
     ),
     liveReloadRoot := (frontend / siteDir).value.toPath,

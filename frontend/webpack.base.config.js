@@ -1,11 +1,11 @@
 const ScalaJS = require('./scalajs.webpack.config');
-const Merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const rootDir = path.resolve(__dirname, '../../../../src/main/resources');
 const cssDir = path.resolve(rootDir, 'css');
 
-const WebApp = Merge(ScalaJS, {
+const WebApp = merge(ScalaJS, {
   entry: {
     styles: [path.resolve(cssDir, './www.js')],
     vendors: [path.resolve(cssDir, './vendors.js')],
@@ -22,16 +22,28 @@ const WebApp = Merge(ScalaJS, {
         ]
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-        use: [
-          { loader: 'url-loader' }
+        test: /\.(woff|woff2)$/,
+        type: 'asset/inline', // exports a data URI of the asset
+        include: [
+          path.resolve(rootDir, 'fonts')
         ]
       },
       {
-        test: /\.(png|jpg|jpeg)$/,
-        use: [
-          { loader: 'file-loader', options: { name: '[folder]/[name].[hash].[ext]' } }
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        type: 'asset/inline',
+        include: [
+          rootDir
         ]
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg)$/,
+        type: 'asset/resource',
+        include: [
+          rootDir
+        ],
+        generator: {
+          filename: 'img/[name].[hash][ext]'
+        }
       },
       {
         test: /\.less$/,
