@@ -10,4 +10,6 @@ Navigate to http://localhost:10101.
 
 ## Deployment
 
-    sbt Prod/deploy
+    sbt "set Global / mode := ProdMode" deploy
+
+See [deploy.yml](.github/workflows/deploy.yml) for details.

@@ -3,6 +3,7 @@ package com.malliina.labs
 import com.malliina.http.FullUrl
 import com.malliina.labs.Pages.*
 import com.malliina.live.LiveReload
+import com.malliina.sitegen.HashedAssets
 import scalatags.Text.all.*
 import scalatags.text.Builder
 
@@ -12,8 +13,6 @@ import java.time.format.DateTimeFormatter
 import scala.jdk.CollectionConverters.IteratorHasAsScala
 
 object Pages {
-  def apply(isProd: Boolean, root: Path): Pages = new Pages(isProd, root)
-
   implicit val fullUrl: AttrValue[FullUrl] = attrType[FullUrl](_.url)
 
   val empty = modifier()
@@ -27,20 +26,17 @@ object Pages {
     t.setAttr(a.name, Builder.GenericAttrValueSource(stringify(v)))
 }
 
-class Pages(isProd: Boolean, root: Path) {
+class Pages(isProd: Boolean) {
   val globalDescription = "Skogberg Labs."
 
   val section = tag("section")
 
   val scripts =
     if (isProd) {
-      scriptAt("frontend-opt.js", defer)
+      scriptAt("frontend.js", defer)
     } else {
-      val prefix = "frontend-fastopt"
       modifier(
-        scriptAt(s"$prefix-library.js"),
-        scriptAt(s"$prefix-loader.js"),
-        scriptAt(s"$prefix.js"),
+        scriptAt("frontend.js"),
         script(src := LiveReload.script)
       )
     }
@@ -74,7 +70,7 @@ class Pages(isProd: Boolean, root: Path) {
         meta(charset := "UTF-8"),
         meta(
           name := "viewport",
-          content := "width=device-width, initial-scale=1.0, maximum-scale=1.0"
+          content := "width=device-width, initial-scale=1.0"
         ),
         link(rel := "shortcut icon", `type` := "image/png", href := findAsset("img/jag-16x16.png")),
         meta(name := "description", content := globalDescription),
@@ -103,27 +99,9 @@ class Pages(isProd: Boolean, root: Path) {
 
   def scriptAt(file: String, modifiers: Modifier*) = script(src := findAsset(file), modifiers)
 
-  def findAsset(file: String): String = {
-    val path = root.resolve(file)
-    val dir = path.getParent
-    Files.createDirectories(dir)
-    val candidates = Files.list(dir).iterator().asScala.toList
-    val lastSlash = file.lastIndexOf("/")
-    val nameStart = if (lastSlash == -1) 0 else lastSlash + 1
-    val name = file.substring(nameStart)
-    val dotIdx = name.lastIndexOf(".")
-    val noExt = name.substring(0, dotIdx)
-    val ext = name.substring(dotIdx + 1)
-    val result = candidates.filter { p =>
-      val candidateName = p.getFileName.toString
-      candidateName.startsWith(noExt) && candidateName.endsWith(ext)
-    }.sortBy { p => Files.getLastModifiedTime(p) }.reverse.headOption
-    val found = result.getOrElse(
-      fail(s"Not found: '$file'. Found ${candidates.mkString(", ")}.")
-    )
-    val relative = root.relativize(found).toString.replace("\\", "/")
-    s"/$relative"
-  }
+  def inlineOrAsset(at: String) = HashedAssets.dataUris.getOrElse(at, findAsset(at))
+  def findAsset(at: String) =
+    HashedAssets.assets.get(at).map(p => s"/$p").getOrElse(fail(s"Not found: '$at'."))
 
   def fail(message: String) = throw new Exception(message)
 }
