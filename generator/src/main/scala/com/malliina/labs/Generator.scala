@@ -1,23 +1,18 @@
 package com.malliina.labs
 
+import buildinfo.BuildInfo
+
 import java.nio.file.{Files, Path, Paths}
 
 object Generator {
   val log = AppLogger(getClass)
 
   def main(args: Array[String]): Unit =
-    args.toList match {
-      case mode :: root :: Nil =>
-        val path = Paths.get(root)
-        log.info(s"Generating $mode from '$path'...")
-        generate(mode == "prod", path)
-      case other =>
-        throw new Exception(s"Invalid arguments: ${other.mkString(" ")}")
-    }
+    generate(BuildInfo.isProd, BuildInfo.siteDir.toPath)
 
   def generate(isProd: Boolean, dist: Path) = {
     Files.createDirectories(dist)
-    val pages = Pages(isProd, dist)
+    val pages = Pages(isProd)
     val pageMap = Map(
       pages.index -> "index.html",
       pages.pill -> "thepill/index.html",

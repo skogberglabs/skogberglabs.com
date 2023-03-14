@@ -12,8 +12,10 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11'
-      - name: Set up Netlify
-        uses: netlify/actions/cli@master
+          java-version: '17'
+          cache: 'sbt'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - name: Run tests
         run: sbt test
