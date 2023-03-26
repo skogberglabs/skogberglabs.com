@@ -33,6 +33,7 @@ val generator = project
     copyFolders += ((Compile / resourceDirectory).value / "public").toPath,
     libraryDependencies ++= SbtUtils.loggingDeps ++ Seq(
       "com.malliina" %% "primitives" % "3.4.0",
+      "com.malliina" %% "common-build" % "1.6.12",
       "com.lihaoyi" %% "scalatags" % scalatagsVersion
     )
   )
@@ -40,8 +41,5 @@ val generator = project
 val www = project
   .in(file("."))
   .aggregate(frontend, generator)
-  .settings(
-    build := (generator / Dev / build).value
-  )
 
 Global / onChangedBuildSource := ReloadOnSourceChanges

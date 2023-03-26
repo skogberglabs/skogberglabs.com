@@ -4,13 +4,13 @@ import buildinfo.BuildInfo
 
 import java.nio.file.{Files, Path, Paths}
 
-object Generator {
+object Generator:
   val log = AppLogger(getClass)
 
   def main(args: Array[String]): Unit =
     generate(BuildInfo.isProd, BuildInfo.siteDir.toPath)
 
-  def generate(isProd: Boolean, dist: Path) = {
+  def generate(isProd: Boolean, dist: Path) =
     Files.createDirectories(dist)
     val pages = Pages(isProd)
     val pageMap = Map(
@@ -21,5 +21,3 @@ object Generator {
     )
     pageMap.foreach { case (page, file) => page.write(dist.resolve(file)) }
     NetlifyClient.writeHeaders(dist)
-  }
-}
