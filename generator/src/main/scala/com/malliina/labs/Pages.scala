@@ -3,7 +3,7 @@ package com.malliina.labs
 import com.malliina.http.FullUrl
 import com.malliina.labs.Pages.*
 import com.malliina.live.LiveReload
-import com.malliina.sitegen.HashedAssets
+import com.malliina.assets.HashedAssets
 import scalatags.Text.all.*
 import scalatags.text.Builder
 
@@ -12,7 +12,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import scala.jdk.CollectionConverters.IteratorHasAsScala
 
-object Pages {
+object Pages:
   implicit val fullUrl: AttrValue[FullUrl] = attrType[FullUrl](_.url)
 
   val empty = modifier()
@@ -24,22 +24,19 @@ object Pages {
 
   def attrType[T](stringify: T => String): AttrValue[T] = (t: Builder, a: Attr, v: T) =>
     t.setAttr(a.name, Builder.GenericAttrValueSource(stringify(v)))
-}
 
-class Pages(isProd: Boolean) {
+class Pages(isProd: Boolean):
   val globalDescription = "Skogberg Labs."
 
   val section = tag("section")
 
   val scripts =
-    if (isProd) {
-      scriptAt("frontend.js", defer)
-    } else {
+    if isProd then scriptAt("frontend.js", defer)
+    else
       modifier(
         scriptAt("frontend.js"),
         script(src := LiveReload.script)
       )
-    }
 
   def index = base("Skogberg Labs")(empty)
   def pill = base("The Pill")(empty)
@@ -81,7 +78,6 @@ class Pages(isProd: Boolean) {
         meta(property := "og:title", content := titleText),
         meta(property := "og:description", content := globalDescription),
         styleAt("styles.css"),
-        styleAt("vendors.css"),
         styleAt("fonts.css")
       ),
       body(
@@ -90,10 +86,9 @@ class Pages(isProd: Boolean) {
     )
   )
 
-  def format(date: LocalDate) = {
+  def format(date: LocalDate) =
     val localDate = DateTimeFormatter.ISO_LOCAL_DATE.format(date)
     time(datetime := localDate)(localDate)
-  }
 
   def styleAt(file: String) = link(rel := "stylesheet", href := findAsset(file))
 
@@ -104,4 +99,3 @@ class Pages(isProd: Boolean) {
     HashedAssets.assets.get(at).map(p => s"/$p").getOrElse(fail(s"Not found: '$at'."))
 
   def fail(message: String) = throw new Exception(message)
-}
