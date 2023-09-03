@@ -32,8 +32,8 @@ val generator = project
     scalajsProject := frontend,
     copyFolders += ((Compile / resourceDirectory).value / "public").toPath,
     libraryDependencies ++= SbtUtils.loggingDeps ++ Seq(
-      "com.malliina" %% "primitives" % "3.4.0",
-      "com.malliina" %% "common-build" % "1.6.12",
+      "com.malliina" %% "primitives" % "3.4.5",
+      "com.malliina" %% "common-build" % "1.6.19",
       "com.lihaoyi" %% "scalatags" % scalatagsVersion
     )
   )
