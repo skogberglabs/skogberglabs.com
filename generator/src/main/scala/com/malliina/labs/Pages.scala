@@ -60,6 +60,10 @@ class Pages(isProd: Boolean):
     )
   )
 
+  def notFound = base("Not found")(
+    div(`class` := "centered")("Not found.")
+  )
+
   def base(titleText: String)(contents: Modifier*): TagPage = TagPage(
     html(lang := "en")(
       head(
